@@ -5,15 +5,18 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Hero from './components/Hero/Hero';
 import Section from './components/Section/Section';
+// import SongsSection from './components/SongsSection/SongsSection'; // REMOVED: No longer needed
 
 // Import the API utility functions
-import { fetchTopAlbums, fetchNewAlbums } from './api/api'; // NEW: Import fetchNewAlbums
+import { fetchTopAlbums, fetchNewAlbums, fetchGenres, fetchAllSongs } from './api/api'; // NEW: Import fetchGenres, fetchAllSongs
 
 // Placeholder for future pages/components
 function HomePage() {
   const [searchData, setSearchData] = useState([]); // For Navbar search
   const [topAlbums, setTopAlbums] = useState([]); // State to store top albums
-  const [newAlbums, setNewAlbums] = useState([]); // NEW: State to store new albums
+  const [newAlbums, setNewAlbums] = useState([]); // State to store new albums
+  const [genres, setGenres] = useState([]); // NEW: State to store genres
+  const [allSongs, setAllSongs] = useState([]); // NEW: State to store all songs
 
   useEffect(() => {
     // Simulate fetching data for search bar (keep this for now)
@@ -24,21 +27,23 @@ function HomePage() {
     ];
     setSearchData(dummySearchData);
 
-    // Fetch top albums when the component mounts
-    const getTopAlbums = async () => {
-      const data = await fetchTopAlbums();
-      setTopAlbums(data);
+    const fetchData = async () => {
+      // Fetch all data concurrently
+      const [topAlbumsData, newAlbumsData, genresData, allSongsData] = await Promise.all([
+        fetchTopAlbums(),
+        fetchNewAlbums(),
+        fetchGenres(),
+        fetchAllSongs(),
+      ]);
+
+      setTopAlbums(topAlbumsData);
+      setNewAlbums(newAlbumsData);
+      setGenres([{ key: 'all', label: 'All' }, ...genresData]); // Add 'All' genre at the beginning
+      setAllSongs(allSongsData);
     };
 
-    // Fetch new albums when the component mounts
-    const getNewAlbums = async () => { // NEW FUNCTION TO FETCH NEW ALBUMS
-      const data = await fetchNewAlbums();
-      setNewAlbums(data);
-    };
-
-    getTopAlbums();
-    getNewAlbums(); // Call the function to fetch new albums
-  }, []); // Empty dependency array means this runs once on mount
+    fetchData();
+  }, []);
 
   return (
     <div>
@@ -47,12 +52,17 @@ function HomePage() {
 
       {/* Section for Top Albums */}
       {topAlbums.length > 0 && (
-        <Section title="Top Albums" data={topAlbums} />
+        <Section title="Top Albums" data={topAlbums} type="album" /> // Added type prop
       )}
 
-      {/* NEW: Section for New Albums */}
+      {/* Section for New Albums */}
       {newAlbums.length > 0 && (
-        <Section title="New Albums" data={newAlbums} />
+        <Section title="New Albums" data={newAlbums} type="album" /> // Added type prop
+      )}
+
+      {/* NEW: Re-use Section for Songs, passing genres and allSongs */}
+      {allSongs.length > 0 && genres.length > 0 && (
+        <Section title="Songs" data={allSongs} type="song" genres={genres} /> // Added type and genres props
       )}
     </div>
   );

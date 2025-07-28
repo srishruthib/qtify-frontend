@@ -21,7 +21,7 @@ export const fetchTopAlbums = async () => {
  * Fetches new albums from the QTify backend API using Axios.
  * @returns {Promise<Array>} A promise that resolves to an array of new album objects.
  */
-export const fetchNewAlbums = async () => { // NEW FUNCTION
+export const fetchNewAlbums = async () => {
   try {
     const response = await axios.get(`${BACKEND_ENDPOINT}/albums/new`);
     return response.data;
@@ -31,5 +31,30 @@ export const fetchNewAlbums = async () => { // NEW FUNCTION
   }
 };
 
-// You can add other API fetching functions here later if needed
-// export const fetchSongs = async () => { ... };
+/**
+ * Fetches genres from the QTify backend API using Axios.
+ * @returns {Promise<Array>} A promise that resolves to an array of genre objects.
+ */
+export const fetchGenres = async () => { // NEW FUNCTION
+  try {
+    const response = await axios.get(`${BACKEND_ENDPOINT}/genres`);
+    return response.data.data; // Genres API returns data inside a 'data' property
+  } catch (error) {
+    console.error("Error fetching genres:", error);
+    return [];
+  }
+};
+
+/**
+ * Fetches all songs from the QTify backend API using Axios.
+ * @returns {Promise<Array>} A promise that resolves to an array of song objects.
+ */
+export const fetchAllSongs = async () => { // NEW FUNCTION
+  try {
+    const response = await axios.get(`${BACKEND_ENDPOINT}/songs`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all songs:", error);
+    return [];
+  }
+};
