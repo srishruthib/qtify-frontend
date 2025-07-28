@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
-import styles from './Section.module.css'; // Import the CSS module
-import Card from '../Card/Card'; // Import the reusable Card component
+import styles from './Section.module.css';
+import Card from '../Card/Card';
+import Carousel from '../Carousel/Carousel'; // Import the Carousel component
 
 function Section({ title, data }) {
-  // State to manage whether the section is collapsed or expanded
+  // State to manage whether the section is collapsed (showing grid) or expanded (showing carousel)
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   // Function to toggle the collapsed state
   const handleToggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
-
-  // Determine which data to display based on collapse state
-  // For now, let's show a fixed number (e.g., 7) when collapsed
-  const displayData = isCollapsed ? data.slice(0, 7) : data;
 
   return (
     <div className={styles.sectionWrapper}>
@@ -24,17 +21,32 @@ function Section({ title, data }) {
           {isCollapsed ? 'Show All' : 'Collapse'}
         </button>
       </div>
-      <div className={styles.cardsContainer}>
-        {displayData.map((item) => (
-          <Card
-            key={item.id} // Use unique ID for key
-            image={item.image}
-            follows={item.follows}
-            title={item.title}
-            // Assuming the API data provides these properties
-          />
-        ))}
-      </div>
+
+      {/* Conditional rendering: show grid when collapsed, show carousel when expanded */}
+      {isCollapsed ? (
+        <div className={styles.cardsContainer}> {/* This is your grid layout */}
+          {data.map((item) => (
+            <Card
+              key={item.id}
+              image={item.image}
+              follows={item.follows}
+              title={item.title}
+            />
+          ))}
+        </div>
+      ) : (
+        <Carousel
+          data={data}
+          renderComponent={(item) => ( // Pass a function to render each item as a Card
+            <Card
+              key={item.id}
+              image={item.image}
+              follows={item.follows}
+              title={item.title}
+            />
+          )}
+        />
+      )}
     </div>
   );
 }

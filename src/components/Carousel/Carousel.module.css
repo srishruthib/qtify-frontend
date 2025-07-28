@@ -1,0 +1,62 @@
+/* src/components/Carousel/Carousel.module.css */
+
+.carouselContainer {
+  position: relative;
+  width: 100%;
+  padding: 0 32px; /* Match section padding */
+  box-sizing: border-box; /* Include padding in width */
+}
+
+/* Override default Swiper styles for navigation buttons */
+.carouselContainer :global(.swiper-button-prev),
+.carouselContainer :global(.swiper-button-next) {
+  display: none !important; /* Hide default Swiper buttons */
+}
+
+.navigationWrapper {
+  position: absolute;
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%);
+  width: calc(100% - 64px); /* Full width minus padding */
+  left: 32px; /* Align with padding */
+  display: flex;
+  justify-content: space-between;
+  z-index: 10; /* Ensure arrows are above carousel content */
+  pointer-events: none; /* Allow clicks to pass through to buttons */
+}
+
+.leftArrow,
+.rightArrow {
+  pointer-events: all; /* Re-enable pointer events for the buttons themselves */
+  display: flex; /* To center the SVG within the button div */
+  align-items: center;
+  justify-content: center;
+}
+
+/* Position the custom arrows */
+.leftArrow {
+  margin-left: -16px; /* Adjust to position correctly relative to slides */
+}
+
+.rightArrow {
+  margin-right: -16px; /* Adjust to position correctly relative to slides */
+}
+
+/* SwiperSlide styling to ensure cards fit */
+.swiperSlide {
+  width: 159px !important; /* Set fixed width for each card, matching Card.module.css */
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+/* Adjustments for smaller screens if needed, though breakpoints handle most */
+@media (max-width: 768px) {
+  .carouselContainer {
+    padding: 0 16px;
+    width: calc(100% - 32px);
+    left: 16px;
+  }
+  .navigationWrapper {
+    width: calc(100% - 32px);
+    left: 16px;
+  }
+}

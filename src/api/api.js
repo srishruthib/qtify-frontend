@@ -1,5 +1,5 @@
 // src/api/api.js
-import axios from 'axios'; // Import Axios
+import axios from 'axios';
 
 const BACKEND_ENDPOINT = "https://qtify-backend-labs.crio.do";
 
@@ -9,14 +9,27 @@ const BACKEND_ENDPOINT = "https://qtify-backend-labs.crio.do";
  */
 export const fetchTopAlbums = async () => {
   try {
-    const response = await axios.get(`${BACKEND_ENDPOINT}/albums/top`); // Use axios.get
-    return response.data; // Axios puts the response data in .data
+    const response = await axios.get(`${BACKEND_ENDPOINT}/albums/top`);
+    return response.data;
   } catch (error) {
     console.error("Error fetching top albums:", error);
-    return []; // Return an empty array in case of error
+    return [];
+  }
+};
+
+/**
+ * Fetches new albums from the QTify backend API using Axios.
+ * @returns {Promise<Array>} A promise that resolves to an array of new album objects.
+ */
+export const fetchNewAlbums = async () => { // NEW FUNCTION
+  try {
+    const response = await axios.get(`${BACKEND_ENDPOINT}/albums/new`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching new albums:", error);
+    return [];
   }
 };
 
 // You can add other API fetching functions here later if needed
-// export const fetchNewAlbums = async () => { ... };
 // export const fetchSongs = async () => { ... };

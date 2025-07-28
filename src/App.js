@@ -4,16 +4,16 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 // Import your components
 import Navbar from './components/Navbar/Navbar';
 import Hero from './components/Hero/Hero';
-// import Card from './components/Card/Card'; // No longer directly used in App.js
-import Section from './components/Section/Section'; // NEW: Import Section component
+import Section from './components/Section/Section';
 
-// Import the API utility function
-import { fetchTopAlbums } from './api/api';
+// Import the API utility functions
+import { fetchTopAlbums, fetchNewAlbums } from './api/api'; // NEW: Import fetchNewAlbums
 
 // Placeholder for future pages/components
 function HomePage() {
   const [searchData, setSearchData] = useState([]); // For Navbar search
   const [topAlbums, setTopAlbums] = useState([]); // State to store top albums
+  const [newAlbums, setNewAlbums] = useState([]); // NEW: State to store new albums
 
   useEffect(() => {
     // Simulate fetching data for search bar (keep this for now)
@@ -30,7 +30,14 @@ function HomePage() {
       setTopAlbums(data);
     };
 
-    getTopAlbums(); // Call the function to fetch data
+    // Fetch new albums when the component mounts
+    const getNewAlbums = async () => { // NEW FUNCTION TO FETCH NEW ALBUMS
+      const data = await fetchNewAlbums();
+      setNewAlbums(data);
+    };
+
+    getTopAlbums();
+    getNewAlbums(); // Call the function to fetch new albums
   }, []); // Empty dependency array means this runs once on mount
 
   return (
@@ -38,12 +45,15 @@ function HomePage() {
       <Navbar searchData={searchData} />
       <Hero />
 
-      {/* NEW: Use the Section component to display Top Albums */}
+      {/* Section for Top Albums */}
       {topAlbums.length > 0 && (
         <Section title="Top Albums" data={topAlbums} />
       )}
 
-      {/* You can add more sections here later, e.g., for New Albums */}
+      {/* NEW: Section for New Albums */}
+      {newAlbums.length > 0 && (
+        <Section title="New Albums" data={newAlbums} />
+      )}
     </div>
   );
 }
