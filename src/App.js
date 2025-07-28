@@ -56,6 +56,9 @@ function HomePage() {
       setNewAlbums(newAlbumsData);
       setGenres([{ key: 'all', label: 'All' }, ...genresData]);
       setAllSongs(allSongsData);
+
+      // NEW: Console log to verify topAlbums after injection
+      console.log("App.js - Final Top Albums data:", topAlbumsData);
     };
 
     fetchData();

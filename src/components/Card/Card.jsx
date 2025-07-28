@@ -1,26 +1,59 @@
-import React from 'react';
-import styles from './Card.module.css';
-import Chip from '@mui/material/Chip';
+import { Chip, Tooltip } from "@mui/material";
+import React from "react";
+import { Link } from "react-router-dom";
+import styles from "./Card.module.css";
 
-// Added countLabel prop to dynamically display "Follows" or "Likes"
-function Card({ image, follows, title, countLabel = "Follows" }) { // Default to "Follows"
-  return (
-    <div className={styles.card}>
-      <div className={styles.imageWrapper}>
-        <img src={image} alt={title} className={styles.cardImage} />
-        <div className={styles.chipWrapper}>
-          <Chip
-            label={`${follows} ${countLabel}`} // Use countLabel here
-            size="small"
-            className={styles.chip}
-          />
-        </div>
-      </div>
-      <div className={styles.titleSection}>
-        <p className={styles.cardTitle}>{title}</p>
-      </div>
-    </div>
-  );
+function Card({ data, type }) {
+  const getCard = (type) => {
+    switch (type) {
+      case "album": {
+        const { image, follows, title, slug, songs } = data;
+        return (
+          <Tooltip title={`${songs.length} songs`} placement="top" arrow>
+            <Link to={`/album/${slug}`}>
+              <div className={styles.wrapper}>
+                <div className={styles.card}>
+                  <img src={image} alt="album" loading="lazy" />
+                  <div className={styles.banner}>
+                    <Chip
+                      label={`${follows} Follows`}
+                      size="small"
+                      className={styles.chip}
+                    />
+                  </div>
+                </div>
+                <div className={styles.titleWrapper}>
+                  <p>{title}</p>
+                </div>
+              </div>
+            </Link>
+          </Tooltip>
+        );
+      }
+      case "song": {
+        const { image, likes, title } = data;
+
+        return (
+          <div className={styles.wrapper}>
+            <div className={styles.card}>
+              <img src={image} alt="song" loading="lazy" />
+              <div className={styles.banner}>
+                <div className={styles.pill}>
+                  <p>{likes} Likes</p>
+                </div>
+              </div>
+            </div>
+            <div className={styles.titleWrapper}>
+              <p>{title}</p>
+            </div>
+          </div>
+        );
+      }
+      default:
+        return <></>;
+    }
+  };
+  return getCard(type);
 }
 
 export default Card;
