@@ -1,0 +1,23 @@
+/* src/index.css */
+
+/* Define global CSS variables for colors */
+:root {
+  --color-black: #121212; /* Dark background color from Figma */
+  --color-primary: #34c94b; /* Green primary color from Figma */
+  --color-white: #ffffff; /* White text color */
+}
+
+/* Global styles for the body and code elements */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif; /* Keep Inter as default font */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-black); /* Apply global dark background */
+  color: var(--color-white); /* Apply global white text color */
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
