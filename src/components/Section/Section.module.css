@@ -1,0 +1,47 @@
+/* src/components/Section/Section.module.css */
+
+.sectionWrapper {
+  padding: 0px 32px; /* Horizontal padding for the section */
+  margin-bottom: 40px; /* Vertical spacing between sections */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between; /* Puts title and button on opposite ends */
+  align-items: center;
+  margin-bottom: 20px; /* Vertical spacing between header and cards grid */
+}
+
+.title {
+  color: var(--color-white); /* White text for the section title */
+  font-size: 20px; /* Adjust font size as per Figma */
+  font-weight: 600; /* Bold font for title */
+  margin: 0; /* Remove default margin */
+}
+
+.toggleButton {
+  background: none; /* No background */
+  border: none; /* No border */
+  color: var(--color-primary); /* Green text for the button */
+  font-size: 16px; /* Adjust font size */
+  font-weight: 600; /* Bold font */
+  cursor: pointer; /* Pointer on hover */
+  padding: 8px 12px; /* Padding for click area */
+  border-radius: 8px; /* Slightly rounded button */
+  transition: background-color 0.2s ease-in-out; /* Smooth transition on hover */
+}
+
+.toggleButton:hover {
+  background-color: rgba(52, 201, 75, 0.1); /* Subtle green background on hover */
+}
+
+.cardsContainer {
+  display: flex;
+  flex-wrap: wrap; /* Allows cards to wrap to the next line */
+  gap: 20px; /* Spacing between cards (both horizontal and vertical) */
+  justify-content: flex-start; /* Align cards to the start of the container */
+  /* If you want to center the grid when it's not full width, use:
+     justify-content: center;
+  */
+}
+

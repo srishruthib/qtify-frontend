@@ -1,0 +1,68 @@
+/* src/components/Card/Card.module.css */
+
+.card {
+  width: 159px; /* Based on common card widths in similar designs */
+  height: 230px; /* Adjust height to maintain aspect ratio with 1:1.5 image/bottom ratio */
+  border-radius: 10px; /* Rounded corners for the card */
+  overflow: hidden; /* Ensures image doesn't overflow */
+  background-color: var(--color-black); /* Card background */
+  color: var(--color-white); /* Default text color */
+  position: relative; /* For positioning the chip */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  /* This ratio aims for roughly 2/3 image height */
+  padding-bottom: 75%; /* 4:3 aspect ratio for image area, adjust as needed */
+  overflow: hidden;
+}
+
+.cardImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures image covers the area without distortion */
+  border-radius: 10px 10px 0 0; /* Only top corners rounded for image */
+}
+
+.chipWrapper {
+  position: absolute;
+  bottom: 8px; /* Position from bottom of the image */
+  left: 8px; /* Position from left of the image */
+  z-index: 2; /* Ensure chip is above the image */
+}
+
+.chip {
+  background-color: var(--color-primary) !important; /* Green background for chip */
+  color: var(--color-black) !important; /* Black text for chip */
+  font-size: 10px !important; /* Smaller font size for chip */
+  height: 20px !important; /* Adjust chip height */
+  padding: 0 6px !important; /* Adjust chip padding */
+  border-radius: 10px !important; /* Rounded chip */
+  font-weight: 600;
+}
+
+.titleSection {
+  padding: 10px 8px;
+  background-color: var(--color-white); /* White background for the title section */
+  color: var(--color-black); /* Black text for the title */
+  flex-grow: 1; /* Allows this section to take remaining space */
+  display: flex;
+  align-items: center; /* Vertically center the title */
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap; /* Prevent title from wrapping */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+}
+
