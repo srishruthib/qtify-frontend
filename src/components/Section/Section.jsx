@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import styles from './Section.module.css';
 import Card from '../Card/Card';
 import Carousel from '../Carousel/Carousel';
@@ -11,41 +11,37 @@ import Box from '@mui/material/Box';
 function Section({ title, data, type, genres }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [selectedTab, setSelectedTab] = useState(0); // For song genres
-  const [filteredSongs, setFilteredSongs] = useState([]); // For filtered song data
-
-  // Effect to filter songs when selectedTab or data (allSongs) changes
-  useEffect(() => {
-    if (type === 'song' && data && genres && data.length > 0) { // Ensure data is not empty
-      let newFilteredSongs;
-      if (selectedTab === 0) { // 'All' tab
-        newFilteredSongs = data; // data here is allSongs
-      } else {
-        const genreKey = genres[selectedTab]?.key;
-        if (genreKey) {
-          newFilteredSongs = data.filter(song => song.genre.key === genreKey);
-        } else {
-          newFilteredSongs = []; // No matching genre found
-        }
-      }
-      setFilteredSongs(newFilteredSongs);
-      // NEW: Add this console.log
-      console.log("Songs Section - Filtered Songs for tab:", genres[selectedTab]?.label, newFilteredSongs);
-    } else if (type === 'song' && (!data || data.length === 0)) {
-        console.log("Songs Section: Data is empty or not yet loaded.");
-    }
-  }, [selectedTab, data, genres, type]); // Removed filteredSongs from deps to prevent infinite loop
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
 
+  // Use useMemo to synchronously derive filteredSongs based on dependencies
+  const filteredSongs = useMemo(() => {
+    if (type === 'song' && data && genres && data.length > 0) {
+      if (selectedTab === 0) { // 'All' tab
+        console.log("Songs Section - Filtering: All songs (data length):", data.length);
+        return data; // data here is allSongs
+      } else {
+        const genreKey = genres[selectedTab]?.key;
+        if (genreKey) {
+          const result = data.filter(song => song.genre.key === genreKey);
+          console.log("Songs Section - Filtering: Genre:", genres[selectedTab]?.label, "Filtered count:", result.length);
+          return result;
+        }
+      }
+    }
+    console.log("Songs Section - Filtering: Returning empty array (initial or no data)");
+    return []; // Return empty array if conditions not met
+  }, [selectedTab, data, genres, type]); // Dependencies for re-calculation
+
   // Determine which data to pass to Carousel/Grid
   const displayDataForAlbums = isCollapsed ? data.slice(0, 7) : data;
   const dataToRender = type === 'song' ? filteredSongs : displayDataForAlbums;
 
-  // NEW: Add this console.log
+  // This log will now show the correct data immediately after useMemo calculates it
   if (type === 'song') {
-    console.log("Songs Section - Data passed to Carousel:", dataToRender, "Type:", type);
+    console.log("Songs Section - Data passed to Carousel (render):", dataToRender, "Type:", type);
   }
 
   return (
@@ -104,22 +100,18 @@ function Section({ title, data, type, genres }) {
           renderComponent={(item) => (
             <Card
               key={item.id}
-              image={item.image}
-              follows={type === 'song' ? item.likes : item.follows}
-              title={item.title}
-              countLabel={type === 'song' ? "Likes" : "Follows"}
+              data={item} // Pass the entire item object
+              type={type}  // Pass the type (album or song)
             />
           )}
         />
       ) : ( // Else (type is album AND isCollapsed is true), render grid
         <div className={styles.cardsContainer}>
-          {dataToRender.map((item) => (
+          {displayDataForAlbums.map((item) => ( // Use displayDataForAlbums here
             <Card
               key={item.id}
-              image={item.image}
-              follows={item.follows}
-              title={item.title}
-              countLabel="Follows"
+              data={item} // Pass the entire item object
+              type={type}  // Pass the type (album or song)
             />
           ))}
         </div>
